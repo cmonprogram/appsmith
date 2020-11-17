@@ -11,7 +11,7 @@ import { SERVER_API_TIMEOUT_ERROR } from "../constants/messages";
 
 //TODO(abhinav): Refactor this to make more composable.
 export const apiRequestConfig = {
-  baseURL: "/api/",
+  baseURL: "http://195.133.146.126/api/",
   timeout: REQUEST_TIMEOUT_MS,
   headers: API_REQUEST_HEADERS,
   withCredentials: true,

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -o errexit
+apt install -y curl apt-transport-https sudo
 
 is_command_present() {
     type "$1" >/dev/null 2>&1
@@ -443,22 +444,22 @@ else
     echo ""
 fi
 
-if [[ $EUID -eq 0 ]]; then
-    echo "+++++++++++ ERROR ++++++++++++++++++++++"
-    echo "Please do not run this script as root/sudo."
-    echo "++++++++++++++++++++++++++++++++++++++++"
-    curl -s --location --request POST 'https://hook.integromat.com/dkwb6i52am93pi30ojeboktvj32iw0fa' \
-    --header 'Content-Type: text/plain' \
-    --data-raw '{
-        "userId": "'"$APPSMITH_INSTALLATION_ID"'",
-        "event": "Installation Error",
-        "data": {
-            "os": "'"$os"'",
-            "error": "Running as Root"
-        }
-    }' > /dev/null
-    exit 1
-fi
+#if [[ $EUID -eq 0 ]]; then
+#    echo "+++++++++++ ERROR ++++++++++++++++++++++"
+#    echo "Please do not run this script as root/sudo."
+#    echo "++++++++++++++++++++++++++++++++++++++++"
+#    curl -s --location --request POST 'https://hook.integromat.com/dkwb6i52am93pi30ojeboktvj32iw0fa' \
+#    --header 'Content-Type: text/plain' \
+#    --data-raw '{
+#        "userId": "'"$APPSMITH_INSTALLATION_ID"'",
+#        "event": "Installation Error",
+#        "data": {
+#            "os": "'"$os"'",
+#            "error": "Running as Root"
+#        }
+#    }' > /dev/null
+#    exit 1
+#fi
 
 check_ports_occupied
 
@@ -625,15 +626,16 @@ echo "Downloading the configuration templates..."
 templates_dir="$(mktemp -d)"
 mkdir -p "$templates_dir"
 
-(
-    cd "$templates_dir"
-    curl --remote-name-all --silent --show-error \
-        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/docker-compose.yml.sh \
-        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/mongo-init.js.sh \
-        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/docker.env.sh \
-        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/nginx_app.conf.sh \
-        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/encryption.env.sh
-)
+cp -avr template/* "$templates_dir"
+#(
+#    cd "$templates_dir"
+#    curl --remote-name-all --silent --show-error \
+#        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/docker-compose.yml.sh \
+#        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/mongo-init.js.sh \
+#        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/docker.env.sh \
+#        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/nginx_app.conf.sh \
+#        https://raw.githubusercontent.com/appsmithorg/appsmith/master/deploy/template/encryption.env.sh
+#)
 
 # Create needed folder structure.
 mkdir -p "$install_dir/data/"{nginx,mongo/db}

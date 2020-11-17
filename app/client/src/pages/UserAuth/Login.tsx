@@ -48,6 +48,7 @@ import AnalyticsUtil from "utils/AnalyticsUtil";
 import { getAppsmithConfigs } from "configs";
 import { TncPPLinks } from "./SignUp";
 import { LOGIN_SUBMIT_PATH } from "constants/ApiConstants";
+import { apiRequestConfig } from "api/Api";
 import PerformanceTracker, {
   PerformanceTransactionName,
 } from "utils/PerformanceTracker";
@@ -90,7 +91,7 @@ export const Login = (props: LoginFormProps) => {
     showError = true;
   }
 
-  let loginURL = "/api/v1/" + LOGIN_SUBMIT_PATH;
+  let loginURL = apiRequestConfig.baseURL + "v1/" + LOGIN_SUBMIT_PATH;
   let signupURL = SIGN_UP_URL;
   if (queryParams.has("redirectTo")) {
     loginURL += `?redirectUrl=${queryParams.get("redirectTo")}`;

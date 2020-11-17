@@ -56,8 +56,8 @@ services:
 
   mongo:
     image: mongo
-    expose:
-      - "27017"
+    ports:
+      - "27017:27017"
     environment:
       - MONGO_INITDB_DATABASE=$mongo_database
       - MONGO_INITDB_ROOT_USERNAME=$mongo_root_user
